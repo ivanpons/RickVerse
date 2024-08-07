@@ -2,6 +2,7 @@ package com.llimapons.rickverse.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.LocationOn
@@ -49,19 +50,27 @@ fun MainScreenRoot(
             )
         }
     ) { innerPadding ->
-        NavHost(navController = navController, startDestination = "characters") {
-            composable("characters") {
-                CharacterNavHost()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
+        ){
+            NavHost(navController = navController, startDestination = "characters") {
+                composable("characters") {
+                    CharacterNavHost()
+                }
+                composable("search") {
+                    SearchNavHost()
+                }
+                composable("locations") {
+                    LocationNavHost()
+                }
+                composable("episodes") {
+                    EpisodeNavHost()
+                }
             }
-            composable("search") {
-                SearchNavHost()
-            }
-            composable("locations") {
-                LocationNavHost()
-            }
-            composable("episodes") {
-                EpisodeNavHost()
-            }
+
         }
     }
 }

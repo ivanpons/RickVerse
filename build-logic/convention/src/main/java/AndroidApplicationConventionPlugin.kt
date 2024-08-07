@@ -6,7 +6,9 @@ import com.llimapons.convention.configureKotlinAndroid
 import com.llimapons.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
 
@@ -15,6 +17,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             pluginManager.run {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
+                apply("com.google.devtools.ksp")
+                apply("com.google.dagger.hilt.android")
             }
 
             extensions.configure<ApplicationExtension>() {
@@ -32,6 +36,12 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     commonExtension = this,
                     extensionType = ExtensionType.APPLICATION
                 )
+            }
+
+            dependencies {
+                "implementation"(libs.findLibrary("hilt.android").get())
+                "ksp"(libs.findLibrary("hilt.compiler").get())
+
             }
         }
     }

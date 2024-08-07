@@ -12,7 +12,9 @@ import androidx.navigation.compose.rememberNavController
 import com.llimapons.rickverse.designSystem.RickVerseTheme
 import com.llimapons.rickverse.designSystem.components.RickVerseBottomBar
 import com.llimapons.rickverse.presentation.MainScreenRoot
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
