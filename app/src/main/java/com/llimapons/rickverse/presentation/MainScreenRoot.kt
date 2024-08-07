@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.llimapons.rickverse.designSystem.components.BottomBarItem
 import com.llimapons.rickverse.designSystem.components.RickVerseBottomBar
+import com.llimapons.rickverse.presentation.characters.CharactersScreenRoot
 
 @Composable
 fun MainScreenRoot(
@@ -107,10 +108,7 @@ fun CharacterNavHost(){
     val characterNavHostController = rememberNavController()
     NavHost(navController = characterNavHostController, startDestination = "all_characters"){
         composable("all_characters"){
-            Box(modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center){
-                Text(text = "all_characters")
-            }
+            CharactersScreenRoot()
         }
         composable("character_details"){
 
