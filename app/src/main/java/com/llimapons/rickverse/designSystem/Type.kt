@@ -1,4 +1,4 @@
-package com.llimapons.rickverse.ui.theme
+package com.llimapons.rickverse.designSystem
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

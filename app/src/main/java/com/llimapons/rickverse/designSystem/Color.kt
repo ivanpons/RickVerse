@@ -1,4 +1,4 @@
-package com.llimapons.rickverse.ui.theme
+package com.llimapons.rickverse.designSystem
 
 import androidx.compose.ui.graphics.Color
 
