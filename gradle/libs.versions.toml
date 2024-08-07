@@ -17,6 +17,7 @@ ktorClientLogging = "2.3.8"
 ktorServerCallLogging = "2.3.7"
 koin = "3.5.6"
 hilt = "2.51"
+hiltNavigation = "1.2.0"
 lifecycleRuntimeKtx = "2.8.2"
 composeBom = "2024.06.00"
 materialIconsExtended = "1.6.8"
@@ -113,6 +114,7 @@ androidx-wear = { group = "androidx.wear", name = "wear", version.ref = "wear" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt"}
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"}
 hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt"}
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation"}
 
 
 # Gradle
