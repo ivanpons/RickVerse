@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.llimapons.rickverse.domain.model.CharacterBO
 import com.llimapons.rickverse.domain.repositories.CharacterRepository
 import com.llimapons.rickverse.domain.util.Result
@@ -27,7 +28,9 @@ class CharactersViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            characterRepository.getAllCharacters().collectLatest { pagingData ->
+            characterRepository.getAllCharacters()
+                .cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
                 _charactersState.value = pagingData
             }
         }
