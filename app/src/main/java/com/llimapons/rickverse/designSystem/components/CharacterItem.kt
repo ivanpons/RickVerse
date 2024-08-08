@@ -38,7 +38,9 @@ fun CharacterItem(
             .clickable { onItemClick() },
         contentAlignment = Alignment.TopCenter
     ) {
-        Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))

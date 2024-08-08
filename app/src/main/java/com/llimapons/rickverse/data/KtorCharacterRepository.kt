@@ -1,30 +1,34 @@
 package com.llimapons.rickverse.data
 
-import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.llimapons.rickverse.data.mappers.toCharacterBO
-import com.llimapons.rickverse.data.networking.get
-import com.llimapons.rickverse.data.networking.model.CharacterDto
-import com.llimapons.rickverse.data.networking.model.CharactersPageDto
 import com.llimapons.rickverse.domain.model.CharacterBO
 import com.llimapons.rickverse.domain.repositories.CharacterRepository
-import com.llimapons.rickverse.domain.util.DataError
-import com.llimapons.rickverse.domain.util.Result
-import com.llimapons.rickverse.domain.util.map
-import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class KtorCharacterRepository @Inject constructor(
-    private val httpClient: HttpClient
+    private val ktorCharactersPagingDatasource: KtorCharactersPagingDatasource
 ): CharacterRepository {
 
-    override suspend fun getAllCharacters(): Result<List<CharacterBO>, DataError.Network> {
-        Log.e("KtorCharacterRepository", "getAllCharacters call ")
-       return httpClient.get<CharactersPageDto>(
-           route = "/api/character"
-       ).map { page ->
-           page.results?.map {
-               it.toCharacterBO()
-           } ?: emptyList()
-       }
+    override suspend fun getAllCharacters(): Flow<PagingData<CharacterBO>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 2,
+                initialLoadSize = 40
+            )
+        ){
+            ktorCharactersPagingDatasource
+        }.flow.map {
+            it.map { characterDto ->
+                characterDto.toCharacterBO()
+            }
+        }
     }
+
 }

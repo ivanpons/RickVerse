@@ -66,4 +66,9 @@ dependencies {
 
     // Timber
     implementation(libs.timber)
+
+    //Paging
+    implementation(libs.androidx.paging)
+    implementation(libs.androidx.paging.compose)
+
 }
