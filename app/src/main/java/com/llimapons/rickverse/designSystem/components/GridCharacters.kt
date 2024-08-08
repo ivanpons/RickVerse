@@ -1,13 +1,15 @@
 package com.llimapons.rickverse.designSystem.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -27,11 +29,14 @@ fun CharacterGrid(
     onCharacterClicked: (CharacterBO) -> Unit
 ) {
     val charactersPagingItems: LazyPagingItems<CharacterBO> = characters.collectAsLazyPagingItems()
+    val lazyGridState = rememberLazyGridState()
+
     LazyVerticalGrid(
         modifier = Modifier.padding(vertical = 16.dp),
         columns = GridCells.FixedSize(size = 160.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceAround,
+        state = lazyGridState
     ) {
        items(charactersPagingItems.itemCount){ index ->
            val character = charactersPagingItems[index] ?: return@items
@@ -76,6 +81,14 @@ fun CharacterGrid(
                             onClickRetry = { retry() })
                     }
                 }
+            }
+        }
+    }
+
+    LaunchedEffect(charactersPagingItems) {
+        snapshotFlow { charactersPagingItems.itemCount }.collect { count ->
+            if (count in 1..30) {
+                lazyGridState.scrollToItem(0)
             }
         }
     }
