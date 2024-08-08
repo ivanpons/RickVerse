@@ -1,4 +1,4 @@
-package com.llimapons.rickverse.data.model
+package com.llimapons.rickverse.data.networking.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
