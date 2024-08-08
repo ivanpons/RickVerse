@@ -54,7 +54,7 @@ fun MainScreenRoot(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(bottom = innerPadding.calculateBottomPadding()),
             contentAlignment = Alignment.Center
         ){
             NavHost(navController = navController, startDestination = "characters") {

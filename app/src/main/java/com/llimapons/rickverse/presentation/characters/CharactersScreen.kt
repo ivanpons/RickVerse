@@ -15,10 +15,8 @@ import com.llimapons.rickverse.designSystem.RickVerseTheme
 import com.llimapons.rickverse.designSystem.components.CharacterGrid
 import com.llimapons.rickverse.designSystem.components.RickVerseTopAppBar
 import com.llimapons.rickverse.domain.model.CharacterBO
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun CharactersScreenRoot(
@@ -43,7 +41,7 @@ private fun CharactersScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(top = padding.calculateTopPadding()),
         ) {
             CharacterGrid(
                 characters = state,
