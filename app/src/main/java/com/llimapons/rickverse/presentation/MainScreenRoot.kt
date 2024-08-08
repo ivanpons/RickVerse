@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.llimapons.rickverse.designSystem.components.BottomBarItem
 import com.llimapons.rickverse.designSystem.components.RickVerseBottomBar
 import com.llimapons.rickverse.presentation.characters.CharactersScreenRoot
+import com.llimapons.rickverse.presentation.search.SearchScreenRoot
 
 @Composable
 fun MainScreenRoot(
@@ -121,10 +122,7 @@ fun SearchNavHost(){
     val searchNavHostController = rememberNavController()
     NavHost(navController = searchNavHostController, startDestination = "search"){
         composable("search"){
-            Box(modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center){
-                Text(text = "search")
-            }
+            SearchScreenRoot()
         }
         composable("character_details"){
 

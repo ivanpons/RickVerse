@@ -12,8 +12,9 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class KtorCharacterRepository @Inject constructor(
-    private val ktorCharactersPagingDatasource: KtorCharactersPagingDatasource
-): CharacterRepository {
+    private val ktorCharactersPagingDatasource: KtorCharactersPagingDatasource,
+    private val ktorSearchPagingDatasource: KtorSearchPagingDatasource
+) : CharacterRepository {
 
     override suspend fun getAllCharacters(): Flow<PagingData<CharacterBO>> {
         return Pager(
@@ -22,8 +23,25 @@ class KtorCharacterRepository @Inject constructor(
                 prefetchDistance = 2,
                 initialLoadSize = 40
             )
-        ){
+        ) {
             ktorCharactersPagingDatasource
+        }.flow.map {
+            it.map { characterDto ->
+                characterDto.toCharacterBO()
+            }
+        }
+    }
+
+    override suspend fun searchCharacters(query: String): Flow<PagingData<CharacterBO>> {
+        ktorSearchPagingDatasource.setQuery(query)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 2,
+                initialLoadSize = 40
+            )
+        ) {
+            ktorSearchPagingDatasource
         }.flow.map {
             it.map { characterDto ->
                 characterDto.toCharacterBO()

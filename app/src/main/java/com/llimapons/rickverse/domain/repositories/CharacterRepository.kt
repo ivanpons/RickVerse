@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CharacterRepository {
     suspend fun getAllCharacters(): Flow<PagingData<CharacterBO>>
+    suspend fun searchCharacters(query: String): Flow<PagingData<CharacterBO>>
 }
