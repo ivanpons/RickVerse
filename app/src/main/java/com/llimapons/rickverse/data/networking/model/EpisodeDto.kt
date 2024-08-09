@@ -5,12 +5,12 @@ import kotlinx.serialization.SerialName
 
 
 @Serializable
-data class LocationDto(
+data class EpisodeDto(
+    @SerialName("air_date") val airDate: String?,
+    @SerialName("characters") val characters: List<String>?,
     @SerialName("created") val created: String?,
-    @SerialName("dimension") val dimension: String?,
+    @SerialName("episode") val episode: String?,
     @SerialName("id") val id: Int?,
     @SerialName("name") val name: String?,
-    @SerialName("residents") val residents: List<String>?,
-    @SerialName("type") val type: String?,
     @SerialName("url") val url: String?
 )

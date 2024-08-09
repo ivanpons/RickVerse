@@ -1,39 +1,32 @@
-package com.llimapons.rickverse.data
+package com.llimapons.rickverse.data.networking.remoteDataSource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.llimapons.rickverse.data.networking.get
-import com.llimapons.rickverse.data.networking.model.CharacterDto
-import com.llimapons.rickverse.data.networking.model.CharactersPageDto
+import com.llimapons.rickverse.data.networking.model.PageDto
+import com.llimapons.rickverse.data.networking.model.LocationDto
 import com.llimapons.rickverse.domain.util.Result
 import io.ktor.client.HttpClient
 import java.io.IOException
 import javax.inject.Inject
 
-class KtorSearchPagingDatasource @Inject constructor(
+class KtorLocationsPagingDatasource @Inject constructor(
     private val httpClient: HttpClient
-): PagingSource<Int, CharacterDto>() {
+): PagingSource<Int, LocationDto>() {
 
-    override fun getRefreshKey(state: PagingState<Int, CharacterDto>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, LocationDto>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    private var query: String = ""
-
-    fun setQuery(newQuery: String){
-        query = newQuery
-    }
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterDto> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LocationDto> {
         try {
             val currentLoadingPageKey = params.key ?: 1
-            val response = httpClient.get<CharactersPageDto>(
-                route = "/api/character/",
+            val response = httpClient.get<PageDto<LocationDto>>(
+                route = "/api/location",
                 queryParameters = mapOf(
-                    "name" to query,
                     "page" to (currentLoadingPageKey).toString()
                 )
             )

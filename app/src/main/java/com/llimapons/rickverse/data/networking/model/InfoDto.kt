@@ -1,14 +1,7 @@
 package com.llimapons.rickverse.data.networking.model
-import kotlinx.serialization.Serializable
 
 import kotlinx.serialization.SerialName
-
-
-@Serializable
-data class CharactersPageDto(
-    @SerialName("info") val info: InfoDto?,
-    @SerialName("results") val results: List<CharacterDto>?,
-)
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class InfoDto(

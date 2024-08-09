@@ -6,16 +6,16 @@ data class CharacterBO(
     val gender: String,
     val id: Int,
     val image: String,
-    val location: LocationBO,
+    val location: shortLocationBO,
     val name: String,
-    val origin: LocationBO,
+    val origin: shortLocationBO,
     val species: String,
     val status: String,
     val type: String,
     val url: String
 )
 
-data class LocationBO(
+data class shortLocationBO(
     val name: String,
     val id: String,
 )

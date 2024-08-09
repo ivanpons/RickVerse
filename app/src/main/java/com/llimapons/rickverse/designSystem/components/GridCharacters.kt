@@ -38,7 +38,11 @@ fun CharacterGrid(
         horizontalArrangement = Arrangement.SpaceAround,
         state = lazyGridState
     ) {
-       items(charactersPagingItems.itemCount){ index ->
+       items(
+           count = charactersPagingItems.itemCount,
+           key = {
+               charactersPagingItems[it]?.id ?: it
+           }){ index ->
            val character = charactersPagingItems[index] ?: return@items
            CharacterItem(
                character = character,

@@ -26,6 +26,8 @@ import androidx.navigation.compose.rememberNavController
 import com.llimapons.rickverse.designSystem.components.BottomBarItem
 import com.llimapons.rickverse.designSystem.components.RickVerseBottomBar
 import com.llimapons.rickverse.presentation.characters.CharactersScreenRoot
+import com.llimapons.rickverse.presentation.episodes.EpisodesScreenRoot
+import com.llimapons.rickverse.presentation.locations.LocationsScreenRoot
 import com.llimapons.rickverse.presentation.search.SearchScreenRoot
 
 @Composable
@@ -135,10 +137,7 @@ fun LocationNavHost(){
     val locationNavHostController = rememberNavController()
     NavHost(navController = locationNavHostController, startDestination = "all_locations"){
         composable("all_locations"){
-            Box(modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center){
-                Text(text = "all_locations")
-            }
+           LocationsScreenRoot()
         }
         composable("location_details"){
 
@@ -151,10 +150,7 @@ fun EpisodeNavHost(){
     val episodeNavHostController = rememberNavController()
     NavHost(navController = episodeNavHostController, startDestination = "all_episodes"){
         composable("all_episodes"){
-            Box(modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center){
-                Text(text = "all_episodes")
-            }
+           EpisodesScreenRoot()
         }
         composable("episode_details"){
 

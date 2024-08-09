@@ -35,6 +35,7 @@ fun RickVerseTopAppBar(
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     ) {
         TopAppBar(
             title = {

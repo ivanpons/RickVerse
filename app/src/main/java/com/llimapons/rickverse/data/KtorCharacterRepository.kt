@@ -5,6 +5,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.llimapons.rickverse.data.mappers.toCharacterBO
+import com.llimapons.rickverse.data.networking.remoteDataSource.KtorCharactersPagingDatasource
+import com.llimapons.rickverse.data.networking.remoteDataSource.KtorSearchPagingDatasource
 import com.llimapons.rickverse.domain.model.CharacterBO
 import com.llimapons.rickverse.domain.repositories.CharacterRepository
 import kotlinx.coroutines.flow.Flow

@@ -16,4 +16,6 @@
     <string name="strRetry">Retry</string>
     <string name="strFetchingDataFromServer">Fetching data from server</string>
     <string name="character">Character</string>
+    <string name="locations">Locations</string>
+    <string name="episodes">Episodes</string>
 </resources>

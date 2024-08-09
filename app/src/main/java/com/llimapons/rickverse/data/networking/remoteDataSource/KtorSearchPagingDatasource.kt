@@ -1,16 +1,16 @@
-package com.llimapons.rickverse.data
+package com.llimapons.rickverse.data.networking.remoteDataSource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.llimapons.rickverse.data.networking.get
 import com.llimapons.rickverse.data.networking.model.CharacterDto
-import com.llimapons.rickverse.data.networking.model.CharactersPageDto
+import com.llimapons.rickverse.data.networking.model.PageDto
 import com.llimapons.rickverse.domain.util.Result
 import io.ktor.client.HttpClient
 import java.io.IOException
 import javax.inject.Inject
 
-class KtorCharactersPagingDatasource @Inject constructor(
+class KtorSearchPagingDatasource @Inject constructor(
     private val httpClient: HttpClient
 ): PagingSource<Int, CharacterDto>() {
 
@@ -21,12 +21,19 @@ class KtorCharactersPagingDatasource @Inject constructor(
         }
     }
 
+    private var query: String = ""
+
+    fun setQuery(newQuery: String){
+        query = newQuery
+    }
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterDto> {
         try {
             val currentLoadingPageKey = params.key ?: 1
-            val response = httpClient.get<CharactersPageDto>(
-                route = "/api/character",
+            val response = httpClient.get<PageDto<CharacterDto>>(
+                route = "/api/character/",
                 queryParameters = mapOf(
+                    "name" to query,
                     "page" to (currentLoadingPageKey).toString()
                 )
             )
