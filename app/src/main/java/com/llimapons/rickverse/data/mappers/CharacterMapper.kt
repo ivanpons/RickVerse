@@ -4,7 +4,7 @@ import com.llimapons.rickverse.data.networking.model.CharacterDto
 import com.llimapons.rickverse.data.networking.model.ShortLocationDto
 import com.llimapons.rickverse.data.utils.getUrlIds
 import com.llimapons.rickverse.domain.model.CharacterBO
-import com.llimapons.rickverse.domain.model.shortLocationBO
+import com.llimapons.rickverse.domain.model.ShortLocationBO
 
 fun CharacterDto.toCharacterBO(): CharacterBO =
     CharacterBO(
@@ -22,8 +22,8 @@ fun CharacterDto.toCharacterBO(): CharacterBO =
         episodesId = getUrlIds(this.episode),
     )
 
-fun ShortLocationDto?.toLocationBO(): shortLocationBO =
-    shortLocationBO(
+fun ShortLocationDto?.toLocationBO(): ShortLocationBO =
+    ShortLocationBO(
         name = this?.name ?: "",
         id = this?.url?.substringAfterLast("/") ?: ""
     )

@@ -20,11 +20,17 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun CharactersScreenRoot(
+    onCharacterClicked: (CharacterBO) -> Unit,
     viewModel: CharactersViewModel = hiltViewModel()
 ) {
     CharactersScreen(
         state = viewModel.charactersState,
-        onAction = viewModel::onAction
+        onAction = {
+            when (it) {
+                is CharactersActions.CharacterClicked -> onCharacterClicked(it.character)
+            }
+            viewModel.onAction(it)
+        }
     )
 }
 

@@ -13,7 +13,6 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,12 +22,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.llimapons.rickverse.designSystem.components.BottomBarItem
 import com.llimapons.rickverse.designSystem.components.RickVerseBottomBar
+import com.llimapons.rickverse.presentation.characterInfo.CharacterInfoScreenRoot
 import com.llimapons.rickverse.presentation.characters.CharactersScreenRoot
 import com.llimapons.rickverse.presentation.episodes.EpisodesScreenRoot
 import com.llimapons.rickverse.presentation.locations.LocationsScreenRoot
 import com.llimapons.rickverse.presentation.search.SearchScreenRoot
+import kotlinx.serialization.Serializable
 
 @Composable
 fun MainScreenRoot(
@@ -111,10 +113,21 @@ fun CharacterNavHost(){
     val characterNavHostController = rememberNavController()
     NavHost(navController = characterNavHostController, startDestination = "all_characters"){
         composable("all_characters"){
-            CharactersScreenRoot()
+            CharactersScreenRoot(
+                onCharacterClicked = { character ->
+                    characterNavHostController.navigate(
+                        CharacterInfo(
+                            characterId = character.id
+                        )
+                    )
+                }
+            )
         }
-        composable("character_details"){
-
+        composable<CharacterInfo>{
+            val args = it.toRoute<CharacterInfo>()
+            CharacterInfoScreenRoot(
+                characterId = args.characterId
+            )
         }
     }
 }
@@ -152,8 +165,11 @@ fun EpisodeNavHost(){
         composable("all_episodes"){
            EpisodesScreenRoot()
         }
-        composable("episode_details"){
 
-        }
     }
 }
+
+@Serializable
+data class CharacterInfo(
+    val characterId: Int
+)
