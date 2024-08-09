@@ -6,6 +6,7 @@ data class LocationBO(
     val id: Int,
     val name: String,
     val residents: List<CharacterBO>,
+    val residentsId: List<String>,
     val type: String,
     val url: String
 )

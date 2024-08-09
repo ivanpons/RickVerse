@@ -1,6 +1,7 @@
 package com.llimapons.rickverse.data.mappers
 
 import com.llimapons.rickverse.data.networking.model.LocationDto
+import com.llimapons.rickverse.data.utils.getUrlIds
 import com.llimapons.rickverse.domain.model.LocationBO
 
 fun LocationDto.toLocationBo(): LocationBO =
@@ -11,5 +12,6 @@ fun LocationDto.toLocationBo(): LocationBO =
         dimension = dimension ?: "",
         residents = listOf(),
         url = url ?: "",
-        created = created ?: ""
+        created = created ?: "",
+        residentsId = getUrlIds(residents)
     )

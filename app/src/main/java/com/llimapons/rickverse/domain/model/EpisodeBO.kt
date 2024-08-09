@@ -1,8 +1,9 @@
 package com.llimapons.rickverse.domain.model
 
 data class EpisodeBO(
-    val air_date: String,
+    val airDate: String,
     val characters: List<CharacterBO>,
+    val charactersId: List<String>,
     val created: String,
     val episode: String,
     val id: Int,

@@ -12,9 +12,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import com.llimapons.rickverse.R
 import com.llimapons.rickverse.designSystem.RickVerseTheme
+import com.llimapons.rickverse.designSystem.components.ListTextPaging
 import com.llimapons.rickverse.designSystem.components.RickVerseTopAppBar
 import com.llimapons.rickverse.domain.model.EpisodeBO
 import com.llimapons.rickverse.domain.model.LocationBO
+import com.llimapons.rickverse.presentation.locations.LocationsActions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -43,7 +45,10 @@ private fun EpisodesScreen(
                 .fillMaxSize()
                 .padding(top = padding.calculateTopPadding()),
         ) {
-
+            ListTextPaging(
+                items = state,
+                onItemClicked = { onAction(EpisodesActions.EpisodeClicked(it)) }
+            )
         }
     }
 }

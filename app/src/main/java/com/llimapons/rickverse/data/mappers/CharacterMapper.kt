@@ -2,6 +2,7 @@ package com.llimapons.rickverse.data.mappers
 
 import com.llimapons.rickverse.data.networking.model.CharacterDto
 import com.llimapons.rickverse.data.networking.model.ShortLocationDto
+import com.llimapons.rickverse.data.utils.getUrlIds
 import com.llimapons.rickverse.domain.model.CharacterBO
 import com.llimapons.rickverse.domain.model.shortLocationBO
 
@@ -18,7 +19,7 @@ fun CharacterDto.toCharacterBO(): CharacterBO =
         type = this.type ?: "",
         location = this.location.toLocationBO(),
         origin = this.origin.toLocationBO(),
-        episodesId = getEpisodesIds(this.episode),
+        episodesId = getUrlIds(this.episode),
     )
 
 fun ShortLocationDto?.toLocationBO(): shortLocationBO =
@@ -27,9 +28,3 @@ fun ShortLocationDto?.toLocationBO(): shortLocationBO =
         id = this?.url?.substringAfterLast("/") ?: ""
     )
 
-private fun getEpisodesIds(episodes: List<String>?): List<String> {
-    return episodes?.map { episodeUrl ->
-        val episodeId = episodeUrl.substringAfterLast("/")
-        episodeId
-    } ?: emptyList()
-}
