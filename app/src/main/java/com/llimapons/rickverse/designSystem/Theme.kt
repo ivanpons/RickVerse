@@ -18,7 +18,7 @@ var DarkColorScheme = darkColorScheme(
     onPrimary = RickVerseBlue,
     onBackground = RickVerseLight,
     onSurface = RickVerseLight,
-    onSurfaceVariant = RickVerseLight
+    onSurfaceVariant = RickVerseGrey
 )
 
 @Composable
