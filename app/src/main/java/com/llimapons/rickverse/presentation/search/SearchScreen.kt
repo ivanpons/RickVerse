@@ -25,11 +25,20 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SearchScreenRoot(
+    onCharacterClicked: (CharacterBO) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     SearchScreen(
         state = viewModel.searchState,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when (action) {
+                is SearchActions.CharacterClicked -> {
+                    onCharacterClicked(action.character)
+                }
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 

@@ -137,10 +137,21 @@ fun SearchNavHost(){
     val searchNavHostController = rememberNavController()
     NavHost(navController = searchNavHostController, startDestination = "search"){
         composable("search"){
-            SearchScreenRoot()
+            SearchScreenRoot(
+                onCharacterClicked = { character ->
+                    searchNavHostController.navigate(
+                        CharacterInfo(
+                            characterId = character.id
+                        )
+                    )
+                }
+            )
         }
-        composable("character_details"){
-
+        composable<CharacterInfo>{
+            val args = it.toRoute<CharacterInfo>()
+            CharacterInfoScreenRoot(
+                characterId = args.characterId
+            )
         }
     }
 }

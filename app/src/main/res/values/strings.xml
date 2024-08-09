@@ -18,4 +18,15 @@
     <string name="character">Character</string>
     <string name="locations">Locations</string>
     <string name="episodes">Episodes</string>
+    <string name="error_loading_character">Error loading character Information\n</string>
+    <string name="character_information">Character Information</string>
+    <string name="name">Name</string>
+    <string name="genre">Genre</string>
+    <string name="specie">Specie</string>
+    <string name="status">Status</string>
+    <string name="origin">Origin</string>
+    <string name="last_location">Last location</string>
+    <string name="go_to_location">Go to location</string>
+    <string name="total_episodes">Total episodes</string>
+    <string name="show_episodes_list">Show episodes list</string>
 </resources>
