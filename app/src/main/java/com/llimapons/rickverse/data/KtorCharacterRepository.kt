@@ -66,7 +66,7 @@ class KtorCharacterRepository @Inject constructor(
         }
     }
 
-    override suspend fun getMultipleCharacters(characterIds: List<Int>): Result<List<CharacterBO>, DataError.Network> {
+    override suspend fun getMultipleCharacters(characterIds: List<String>): Result<List<CharacterBO>, DataError.Network> {
         val characterIdsString = characterIds.joinToString(",")
         return httpClient.get<List<CharacterDto>>(
             route = "/api/character/[$characterIdsString]"

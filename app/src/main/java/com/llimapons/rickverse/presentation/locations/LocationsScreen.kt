@@ -20,11 +20,20 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun LocationsScreenRoot(
+    onLocationClicked: (LocationBO) -> Unit,
     viewModel: LocationsViewModel = hiltViewModel()
 ) {
     LocationsScreen(
         state = viewModel.locationsState,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when (action) {
+                is LocationsActions.LocationClicked -> {
+                    onLocationClicked(action.location)
+                }
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 

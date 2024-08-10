@@ -28,6 +28,7 @@ import com.llimapons.rickverse.designSystem.components.RickVerseBottomBar
 import com.llimapons.rickverse.presentation.characterInfo.CharacterInfoScreenRoot
 import com.llimapons.rickverse.presentation.characters.CharactersScreenRoot
 import com.llimapons.rickverse.presentation.episodes.EpisodesScreenRoot
+import com.llimapons.rickverse.presentation.locationInfo.LocationInfoScreenRoot
 import com.llimapons.rickverse.presentation.locations.LocationsScreenRoot
 import com.llimapons.rickverse.presentation.search.SearchScreenRoot
 import kotlinx.serialization.Serializable
@@ -61,7 +62,7 @@ fun MainScreenRoot(
                 .fillMaxSize()
                 .padding(bottom = innerPadding.calculateBottomPadding()),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             NavHost(navController = navController, startDestination = "characters") {
                 composable("characters") {
                     CharacterNavHost()
@@ -109,10 +110,10 @@ private val rickVerseBarItems = listOf(
 )
 
 @Composable
-fun CharacterNavHost(){
+fun CharacterNavHost() {
     val characterNavHostController = rememberNavController()
-    NavHost(navController = characterNavHostController, startDestination = "all_characters"){
-        composable("all_characters"){
+    NavHost(navController = characterNavHostController, startDestination = "all_characters") {
+        composable("all_characters") {
             CharactersScreenRoot(
                 onCharacterClicked = { character ->
                     characterNavHostController.navigate(
@@ -123,7 +124,7 @@ fun CharacterNavHost(){
                 }
             )
         }
-        composable<CharacterInfo>{
+        composable<CharacterInfo> {
             val args = it.toRoute<CharacterInfo>()
             CharacterInfoScreenRoot(
                 characterId = args.characterId
@@ -133,10 +134,10 @@ fun CharacterNavHost(){
 }
 
 @Composable
-fun SearchNavHost(){
+fun SearchNavHost() {
     val searchNavHostController = rememberNavController()
-    NavHost(navController = searchNavHostController, startDestination = "search"){
-        composable("search"){
+    NavHost(navController = searchNavHostController, startDestination = "search") {
+        composable("search") {
             SearchScreenRoot(
                 onCharacterClicked = { character ->
                     searchNavHostController.navigate(
@@ -147,7 +148,7 @@ fun SearchNavHost(){
                 }
             )
         }
-        composable<CharacterInfo>{
+        composable<CharacterInfo> {
             val args = it.toRoute<CharacterInfo>()
             CharacterInfoScreenRoot(
                 characterId = args.characterId
@@ -157,24 +158,35 @@ fun SearchNavHost(){
 }
 
 @Composable
-fun LocationNavHost(){
+fun LocationNavHost() {
     val locationNavHostController = rememberNavController()
-    NavHost(navController = locationNavHostController, startDestination = "all_locations"){
-        composable("all_locations"){
-           LocationsScreenRoot()
+    NavHost(navController = locationNavHostController, startDestination = "all_locations") {
+        composable("all_locations") {
+            LocationsScreenRoot(
+                onLocationClicked = { location ->
+                    locationNavHostController.navigate(
+                        LocationInfo(
+                            locationId = location.id
+                        )
+                    )
+                }
+            )
         }
-        composable("location_details"){
-
+        composable<LocationInfo> {
+            val args = it.toRoute<LocationInfo>()
+            LocationInfoScreenRoot(
+                locationId = args.locationId
+            )
         }
     }
 }
 
 @Composable
-fun EpisodeNavHost(){
+fun EpisodeNavHost() {
     val episodeNavHostController = rememberNavController()
-    NavHost(navController = episodeNavHostController, startDestination = "all_episodes"){
-        composable("all_episodes"){
-           EpisodesScreenRoot()
+    NavHost(navController = episodeNavHostController, startDestination = "all_episodes") {
+        composable("all_episodes") {
+            EpisodesScreenRoot()
         }
 
     }
@@ -183,4 +195,9 @@ fun EpisodeNavHost(){
 @Serializable
 data class CharacterInfo(
     val characterId: Int
+)
+
+@Serializable
+data class LocationInfo(
+    val locationId: Int
 )
