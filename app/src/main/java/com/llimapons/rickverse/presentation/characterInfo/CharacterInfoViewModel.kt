@@ -29,6 +29,8 @@ class CharacterInfoViewModel @Inject constructor(
             is CharacterInfoActions.LoadCharacter -> {
               getCharacter(action.characterId)
             }
+
+            is CharacterInfoActions.OnLocationClicked -> Unit
         }
     }
 

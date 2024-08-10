@@ -127,7 +127,37 @@ fun CharacterNavHost() {
         composable<CharacterInfo> {
             val args = it.toRoute<CharacterInfo>()
             CharacterInfoScreenRoot(
-                characterId = args.characterId
+                characterId = args.characterId,
+                onBackClicked = {
+                    characterNavHostController.popBackStack()
+                },
+                onLocationClicked = { locationId ->
+                    try {
+                        val locationInt = locationId.toInt()
+                        characterNavHostController.navigate(
+                            LocationInfo(
+                                locationId = locationInt
+                            )
+                        )
+                    } catch (t:Throwable){}
+                }
+            )
+        }
+
+        composable<LocationInfo> {
+            val args = it.toRoute<LocationInfo>()
+            LocationInfoScreenRoot(
+                locationId = args.locationId,
+                onBackClicked = {
+                    characterNavHostController.popBackStack()
+                },
+                onCharacterClicked = { character ->
+                    characterNavHostController.navigate(  //Falta hacer que sea unica
+                        CharacterInfo(
+                            characterId = character.id
+                        )
+                    )
+                }
             )
         }
     }
@@ -151,7 +181,37 @@ fun SearchNavHost() {
         composable<CharacterInfo> {
             val args = it.toRoute<CharacterInfo>()
             CharacterInfoScreenRoot(
-                characterId = args.characterId
+                characterId = args.characterId,
+                onBackClicked = {
+                    searchNavHostController.popBackStack()
+                },
+                onLocationClicked = { locationId ->
+                    try {
+                        val locationInt = locationId.toInt()
+                        searchNavHostController.navigate(
+                            LocationInfo(
+                                locationId = locationInt
+                            )
+                        )
+                    } catch (t:Throwable){}
+                }
+            )
+        }
+
+        composable<LocationInfo> {
+            val args = it.toRoute<LocationInfo>()
+            LocationInfoScreenRoot(
+                locationId = args.locationId,
+                onBackClicked = {
+                    searchNavHostController.popBackStack()
+                },
+                onCharacterClicked = { character ->
+                    searchNavHostController.navigate(  //Falta hacer que sea unica
+                        CharacterInfo(
+                            characterId = character.id
+                        )
+                    )
+                }
             )
         }
     }
@@ -175,7 +235,36 @@ fun LocationNavHost() {
         composable<LocationInfo> {
             val args = it.toRoute<LocationInfo>()
             LocationInfoScreenRoot(
-                locationId = args.locationId
+                locationId = args.locationId,
+                onBackClicked = {
+                    locationNavHostController.popBackStack()
+                },
+                onCharacterClicked = { character ->
+                    locationNavHostController.navigate(  //Falta hacer que sea unica
+                        CharacterInfo(
+                            characterId = character.id
+                        )
+                    )
+                }
+            )
+        }
+        composable<CharacterInfo> {
+            val args = it.toRoute<CharacterInfo>()
+            CharacterInfoScreenRoot(
+                characterId = args.characterId,
+                onBackClicked = {
+                    locationNavHostController.popBackStack()
+                },
+                onLocationClicked = { locationId ->
+                    try {
+                        val locationInt = locationId.toInt()
+                        locationNavHostController.navigate(
+                            LocationInfo(
+                                locationId = locationInt
+                            )
+                        )
+                    } catch (t:Throwable){}
+                }
             )
         }
     }

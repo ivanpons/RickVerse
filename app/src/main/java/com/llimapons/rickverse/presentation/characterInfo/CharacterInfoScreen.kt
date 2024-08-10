@@ -1,6 +1,7 @@
 package com.llimapons.rickverse.presentation.characterInfo
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,7 +41,9 @@ import com.llimapons.rickverse.domain.model.ShortLocationBO
 @Composable
 fun CharacterInfoScreenRoot(
     characterId: Int,
-    viewModel: CharacterInfoViewModel = hiltViewModel()
+    onBackClicked: () -> Unit,
+    onLocationClicked: (String) -> Unit,
+    viewModel: CharacterInfoViewModel = hiltViewModel(),
 ) {
 
     LaunchedEffect(true) {
@@ -49,14 +52,21 @@ fun CharacterInfoScreenRoot(
 
     CharacterInfoScreen(
         state = viewModel.state,
-        onAction = viewModel::onAction
+        onAction = {
+            when (it) {
+                CharacterInfoActions.OnBackClicked -> onBackClicked()
+                is CharacterInfoActions.OnLocationClicked -> onLocationClicked(it.location.id)
+                else -> Unit
+            }
+            viewModel.onAction(it)
+        }
     )
 }
 
 @Composable
 private fun CharacterInfoScreen(
     state: CharacterInfoState,
-    onAction: (CharacterInfoActions) -> Unit
+    onAction: (CharacterInfoActions) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -162,7 +172,15 @@ private fun CharacterInfoScreen(
                                     text = stringResource(id = R.string.go_to_location),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onPrimary,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.clickable {
+                                        onAction(
+                                            CharacterInfoActions.OnLocationClicked(
+                                                state.character.origin
+                                            )
+                                        )
+
+                                    }
                                 )
                             }
                         }
@@ -195,7 +213,15 @@ private fun CharacterInfoScreen(
                                     text = stringResource(id = R.string.go_to_location),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onPrimary,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.clickable {
+                                        onAction(
+                                            CharacterInfoActions.OnLocationClicked(
+                                                state.character.location
+                                            )
+                                        )
+
+                                    }
                                 )
                             }
                         }
@@ -243,7 +269,7 @@ fun CharacterHeader(
     name: String,
     status: String,
     gender: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier

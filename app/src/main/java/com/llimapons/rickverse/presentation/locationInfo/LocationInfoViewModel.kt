@@ -25,10 +25,12 @@ class LocationInfoViewModel @Inject constructor(
 
     fun onAction(action: LocationInfoActions) {
         when (action) {
-            LocationInfoActions.OnBackClicked -> {}
+            LocationInfoActions.OnBackClicked -> Unit
             is LocationInfoActions.LoadLocation -> {
              getFullLocatio(action.locationId)
             }
+
+            is LocationInfoActions.CharacterClicked -> Unit
         }
     }
 

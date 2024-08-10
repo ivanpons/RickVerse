@@ -31,4 +31,9 @@
     <string name="show_episodes_list">Show episodes list</string>
     <string name="location_information">Location Information</string>
     <string name="error_loading_location">Error loading location</string>
+    <string name="location">Location</string>
+    <string name="type_location">Type of location</string>
+    <string name="dimension">Dimension</string>
+    <string name="residents">Residents</string>
+    <string name="residents_not_found">Residents not found</string>
 </resources>
