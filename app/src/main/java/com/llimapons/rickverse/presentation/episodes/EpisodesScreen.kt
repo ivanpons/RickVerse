@@ -22,11 +22,18 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun EpisodesScreenRoot(
+    onEpisodeClicked: (EpisodeBO) -> Unit,
     viewModel: EpisodesViewModel = hiltViewModel()
 ) {
     EpisodesScreen(
         state = viewModel.episodesState,
-        onAction = viewModel::onAction
+        onAction = {
+            when (it) {
+                is EpisodesActions.EpisodeClicked -> onEpisodeClicked(it.episode)
+                else -> Unit
+            }
+            viewModel.onAction(it)
+        }
     )
 }
 

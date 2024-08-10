@@ -36,4 +36,6 @@
     <string name="dimension">Dimension</string>
     <string name="residents">Residents</string>
     <string name="residents_not_found">Residents not found</string>
+    <string name="episode_information">Episode Information</string>
+    <string name="error_loading_episode">Error loading episode</string>
 </resources>

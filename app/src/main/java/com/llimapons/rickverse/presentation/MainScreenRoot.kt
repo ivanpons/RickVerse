@@ -27,6 +27,7 @@ import com.llimapons.rickverse.designSystem.components.BottomBarItem
 import com.llimapons.rickverse.designSystem.components.RickVerseBottomBar
 import com.llimapons.rickverse.presentation.characterInfo.CharacterInfoScreenRoot
 import com.llimapons.rickverse.presentation.characters.CharactersScreenRoot
+import com.llimapons.rickverse.presentation.episodeInfo.EpisodeInfoScreenRoot
 import com.llimapons.rickverse.presentation.episodes.EpisodesScreenRoot
 import com.llimapons.rickverse.presentation.locationInfo.LocationInfoScreenRoot
 import com.llimapons.rickverse.presentation.locations.LocationsScreenRoot
@@ -275,7 +276,26 @@ fun EpisodeNavHost() {
     val episodeNavHostController = rememberNavController()
     NavHost(navController = episodeNavHostController, startDestination = "all_episodes") {
         composable("all_episodes") {
-            EpisodesScreenRoot()
+            EpisodesScreenRoot(
+                onEpisodeClicked = {
+                    episodeNavHostController.navigate(
+                        EpisodeInfo(
+                            episodeId = it.id
+                        )
+                    )
+                }
+            )
+        }
+
+        composable<EpisodeInfo> {
+            val args = it.toRoute<EpisodeInfo>()
+            EpisodeInfoScreenRoot(
+                episodeId = args.episodeId,
+                onBackClicked = {
+                    episodeNavHostController.popBackStack()
+                },
+                onCharacterClicked = {}
+            )
         }
 
     }
@@ -289,4 +309,9 @@ data class CharacterInfo(
 @Serializable
 data class LocationInfo(
     val locationId: Int
+)
+
+@Serializable
+data class EpisodeInfo(
+    val episodeId: Int
 )
