@@ -97,11 +97,95 @@ private fun EpisodeInfoScreen(
                         .fillMaxSize()
                         .padding(top = padding.calculateTopPadding()),
                 ) {
-
-                    Text(text = state.episode.name)
-
+                    EpisodeHeader(state.episode)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(id = R.string.characters),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    if (state.episode.characters.isEmpty()) {
+                        Text(
+                            text = stringResource(id = R.string.characters_not_found),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    } else {
+                        CharacterGrid(
+                            characters = MutableStateFlow(PagingData.from(state.episode.characters)),
+                            onCharacterClicked = {
+                                onAction(EpisodeInfoActions.CharacterClicked(it))
+                            }
+                        )
+                    }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun EpisodeHeader(episode: EpisodeBO) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.title),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = episode.name,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center
+        )
+    }
+    Spacer(modifier = Modifier.height(16.dp))
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(id = R.string.air_date),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = episode.airDate,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(id = R.string.episode),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = episode.episode,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.SemiBold
+            )
         }
     }
 }
@@ -116,12 +200,12 @@ fun EpisodeInfoScreenPreview() {
                 episode = EpisodeBO(
                     created = "",
                     id = 0,
-                    name = "Tierra C-233",
+                    name = "A proposito de Rick",
                     url = "",
                     characters = emptyList(),
                     charactersId = emptyList(),
-                    airDate = "",
-                    episode = ""
+                    airDate = "25 de agosto 2025",
+                    episode = "T1S2"
                 )
             ),
             onAction = {}

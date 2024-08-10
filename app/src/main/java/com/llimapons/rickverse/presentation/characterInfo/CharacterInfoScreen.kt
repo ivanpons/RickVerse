@@ -43,6 +43,7 @@ fun CharacterInfoScreenRoot(
     characterId: Int,
     onBackClicked: () -> Unit,
     onLocationClicked: (String) -> Unit,
+    onEpisodeClicked: (String) -> Unit,
     viewModel: CharacterInfoViewModel = hiltViewModel(),
 ) {
 

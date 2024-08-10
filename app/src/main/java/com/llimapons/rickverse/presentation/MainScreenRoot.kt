@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,7 +37,7 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun MainScreenRoot(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val nacBackStackEntry = navController.currentBackStackEntryAsState()
 
@@ -125,42 +126,9 @@ fun CharacterNavHost() {
                 }
             )
         }
-        composable<CharacterInfo> {
-            val args = it.toRoute<CharacterInfo>()
-            CharacterInfoScreenRoot(
-                characterId = args.characterId,
-                onBackClicked = {
-                    characterNavHostController.popBackStack()
-                },
-                onLocationClicked = { locationId ->
-                    try {
-                        val locationInt = locationId.toInt()
-                        characterNavHostController.navigate(
-                            LocationInfo(
-                                locationId = locationInt
-                            )
-                        )
-                    } catch (t:Throwable){}
-                }
-            )
-        }
-
-        composable<LocationInfo> {
-            val args = it.toRoute<LocationInfo>()
-            LocationInfoScreenRoot(
-                locationId = args.locationId,
-                onBackClicked = {
-                    characterNavHostController.popBackStack()
-                },
-                onCharacterClicked = { character ->
-                    characterNavHostController.navigate(  //Falta hacer que sea unica
-                        CharacterInfo(
-                            characterId = character.id
-                        )
-                    )
-                }
-            )
-        }
+        locationInfoNavigation(characterNavHostController)
+        characterInfoNavigation(characterNavHostController)
+        episodeInfoNavigation(characterNavHostController)
     }
 }
 
@@ -179,42 +147,9 @@ fun SearchNavHost() {
                 }
             )
         }
-        composable<CharacterInfo> {
-            val args = it.toRoute<CharacterInfo>()
-            CharacterInfoScreenRoot(
-                characterId = args.characterId,
-                onBackClicked = {
-                    searchNavHostController.popBackStack()
-                },
-                onLocationClicked = { locationId ->
-                    try {
-                        val locationInt = locationId.toInt()
-                        searchNavHostController.navigate(
-                            LocationInfo(
-                                locationId = locationInt
-                            )
-                        )
-                    } catch (t:Throwable){}
-                }
-            )
-        }
-
-        composable<LocationInfo> {
-            val args = it.toRoute<LocationInfo>()
-            LocationInfoScreenRoot(
-                locationId = args.locationId,
-                onBackClicked = {
-                    searchNavHostController.popBackStack()
-                },
-                onCharacterClicked = { character ->
-                    searchNavHostController.navigate(  //Falta hacer que sea unica
-                        CharacterInfo(
-                            characterId = character.id
-                        )
-                    )
-                }
-            )
-        }
+        locationInfoNavigation(searchNavHostController)
+        characterInfoNavigation(searchNavHostController)
+        episodeInfoNavigation(searchNavHostController)
     }
 }
 
@@ -233,41 +168,9 @@ fun LocationNavHost() {
                 }
             )
         }
-        composable<LocationInfo> {
-            val args = it.toRoute<LocationInfo>()
-            LocationInfoScreenRoot(
-                locationId = args.locationId,
-                onBackClicked = {
-                    locationNavHostController.popBackStack()
-                },
-                onCharacterClicked = { character ->
-                    locationNavHostController.navigate(  //Falta hacer que sea unica
-                        CharacterInfo(
-                            characterId = character.id
-                        )
-                    )
-                }
-            )
-        }
-        composable<CharacterInfo> {
-            val args = it.toRoute<CharacterInfo>()
-            CharacterInfoScreenRoot(
-                characterId = args.characterId,
-                onBackClicked = {
-                    locationNavHostController.popBackStack()
-                },
-                onLocationClicked = { locationId ->
-                    try {
-                        val locationInt = locationId.toInt()
-                        locationNavHostController.navigate(
-                            LocationInfo(
-                                locationId = locationInt
-                            )
-                        )
-                    } catch (t:Throwable){}
-                }
-            )
-        }
+        locationInfoNavigation(locationNavHostController)
+        characterInfoNavigation(locationNavHostController)
+        episodeInfoNavigation(locationNavHostController)
     }
 }
 
@@ -287,31 +190,96 @@ fun EpisodeNavHost() {
             )
         }
 
-        composable<EpisodeInfo> {
-            val args = it.toRoute<EpisodeInfo>()
-            EpisodeInfoScreenRoot(
-                episodeId = args.episodeId,
-                onBackClicked = {
-                    episodeNavHostController.popBackStack()
-                },
-                onCharacterClicked = {}
-            )
-        }
-
+        locationInfoNavigation(episodeNavHostController)
+        characterInfoNavigation(episodeNavHostController)
+        episodeInfoNavigation(episodeNavHostController)
     }
 }
 
+private fun NavGraphBuilder.episodeInfoNavigation(characterNavHostController: NavHostController) {
+    composable<EpisodeInfo> {
+        val args = it.toRoute<EpisodeInfo>()
+        EpisodeInfoScreenRoot(
+            episodeId = args.episodeId,
+            onBackClicked = {
+                characterNavHostController.popBackStack()
+            },
+            onCharacterClicked = { character ->
+                characterNavHostController.navigate(
+                    CharacterInfo(
+                        characterId = character.id
+                    )
+                )
+            }
+        )
+    }
+}
+
+private fun NavGraphBuilder.characterInfoNavigation(characterNavHostController: NavHostController) {
+    composable<CharacterInfo> {
+        val args = it.toRoute<CharacterInfo>()
+        CharacterInfoScreenRoot(
+            characterId = args.characterId,
+            onBackClicked = {
+                characterNavHostController.popBackStack()
+            },
+            onLocationClicked = { locationId ->
+                try {
+                    val locationInt = locationId.toInt()
+                    characterNavHostController.navigate(
+                        LocationInfo(
+                            locationId = locationInt
+                        )
+                    )
+                } catch (t: Throwable) {
+                }
+            },
+            onEpisodeClicked = { episodeId ->
+                try {
+                    val episodeInt = episodeId.toInt()
+                    characterNavHostController.navigate(
+                        EpisodeInfo(
+                            episodeId = episodeInt
+                        )
+                    )
+                } catch (t: Throwable) {
+                }
+            }
+        )
+    }
+}
+
+private fun NavGraphBuilder.locationInfoNavigation(characterNavHostController: NavHostController) {
+    composable<LocationInfo> {
+        val args = it.toRoute<LocationInfo>()
+        LocationInfoScreenRoot(
+            locationId = args.locationId,
+            onBackClicked = {
+                characterNavHostController.popBackStack()
+            },
+            onCharacterClicked = { character ->
+                characterNavHostController.navigate(
+                    CharacterInfo(
+                        characterId = character.id
+                    )
+                )
+            }
+        )
+    }
+}
+
+
 @Serializable
 data class CharacterInfo(
-    val characterId: Int
+    val characterId: Int,
 )
 
 @Serializable
 data class LocationInfo(
-    val locationId: Int
+    val locationId: Int,
 )
 
 @Serializable
 data class EpisodeInfo(
-    val episodeId: Int
+    val episodeId: Int,
 )

@@ -41,7 +41,7 @@ private fun CharactersScreen(
 ) {
     Scaffold(
         topBar = {
-            RickVerseTopAppBar(title = stringResource(id = R.string.characters))
+            RickVerseTopAppBar(title = stringResource(id = R.string.all_characters))
         }
     ) { padding ->
         Box(

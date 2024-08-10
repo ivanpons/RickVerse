@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">RickVerse</string>
     <string name="go_back">Back</string>
-    <string name="characters">All Characters</string>
+    <string name="all_characters">All Characters</string>
+    <string name="characters">Characters</string>
     <string name="character_picture">Character picture</string>
 
     <string name="error_disk_full">Failed to save the item because your disk is full.</string>
@@ -38,4 +39,8 @@
     <string name="residents_not_found">Residents not found</string>
     <string name="episode_information">Episode Information</string>
     <string name="error_loading_episode">Error loading episode</string>
+    <string name="title">Title</string>
+    <string name="episode">Episode</string>
+    <string name="air_date">Air date</string>
+    <string name="characters_not_found">Character not founds</string>
 </resources>
