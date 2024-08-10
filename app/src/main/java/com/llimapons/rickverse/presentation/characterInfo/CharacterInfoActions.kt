@@ -7,4 +7,8 @@ sealed interface CharacterInfoActions {
 
     data object OnBackClicked: CharacterInfoActions
     data class OnLocationClicked(val location: ShortLocationBO) : CharacterInfoActions
+    data class OnEpisodeClicked(val episodeId: String) : CharacterInfoActions
+    data object ShowEpisodesListClicked : CharacterInfoActions
+    data object DismissEpisodesList : CharacterInfoActions
+
 }

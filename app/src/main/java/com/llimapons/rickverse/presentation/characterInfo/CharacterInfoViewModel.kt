@@ -31,6 +31,16 @@ class CharacterInfoViewModel @Inject constructor(
             }
 
             is CharacterInfoActions.OnLocationClicked -> Unit
+            CharacterInfoActions.DismissEpisodesList ->{
+                state = state.copy(shouldShowEpisodesList = false)
+            }
+            CharacterInfoActions.ShowEpisodesListClicked -> {
+                state = state.copy(shouldShowEpisodesList = true)
+            }
+
+            is CharacterInfoActions.OnEpisodeClicked -> {
+                state = state.copy(shouldShowEpisodesList = false)
+            }
         }
     }
 

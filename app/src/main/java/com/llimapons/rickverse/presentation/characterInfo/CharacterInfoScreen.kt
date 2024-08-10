@@ -1,5 +1,6 @@
 package com.llimapons.rickverse.presentation.characterInfo
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -7,14 +8,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,8 +32,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -57,6 +64,7 @@ fun CharacterInfoScreenRoot(
             when (it) {
                 CharacterInfoActions.OnBackClicked -> onBackClicked()
                 is CharacterInfoActions.OnLocationClicked -> onLocationClicked(it.location.id)
+                is CharacterInfoActions.OnEpisodeClicked -> onEpisodeClicked(it.episodeId)
                 else -> Unit
             }
             viewModel.onAction(it)
@@ -221,7 +229,6 @@ private fun CharacterInfoScreen(
                                                 state.character.location
                                             )
                                         )
-
                                     }
                                 )
                             }
@@ -248,15 +255,89 @@ private fun CharacterInfoScreen(
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontWeight = FontWeight.SemiBold
                             )
-                            if (state.character.episodesId.isNotEmpty()) {
-                                Text(
-                                    text = stringResource(id = R.string.show_episodes_list),
+                            when(state.character.episodesId.size){
+                                0 -> Unit
+                                1 ->{
+                                    Text(
+                                    text = stringResource(id = R.string.go_to_episode),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onPrimary,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.clickable {
+                                        onAction(CharacterInfoActions.OnEpisodeClicked(state.character.episodesId[0]))
+                                    }
                                 )
+                                }
+                                else ->{
+                                    Text(
+                                        text = stringResource(id = R.string.show_episodes_list),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontWeight = FontWeight.SemiBold,
+                                        modifier = Modifier.clickable {
+                                            onAction(CharacterInfoActions.ShowEpisodesListClicked)
+                                        }
+                                    )
+                                }
                             }
                         }
+                    }
+                }
+                if (state.shouldShowEpisodesList) {
+                    EpisodeListDialog(onAction, state.character.episodesId)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EpisodeListDialog(
+    onAction: (CharacterInfoActions) -> Unit,
+    episodesList: List<String>,
+) {
+    Dialog(onDismissRequest = {
+        onAction(CharacterInfoActions.DismissEpisodesList)
+    }
+    ) {
+        Column(
+            modifier = Modifier
+                .clip(RoundedCornerShape(15.dp))
+                .fillMaxHeight(0.7f)
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(15.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.episodes),
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .fillMaxWidth(0.5f),
+                textAlign = TextAlign.Center
+            )
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(0.5f),
+                verticalArrangement = Arrangement.spacedBy(15.dp)
+            ) {
+                items(
+                    items = episodesList,
+                    key = { it }) { episodeId ->
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable {
+                                onAction(CharacterInfoActions.OnEpisodeClicked(episodeId))
+                            }
+                    ) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = episodeId,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
                     }
                 }
             }

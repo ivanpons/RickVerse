@@ -43,4 +43,5 @@
     <string name="episode">Episode</string>
     <string name="air_date">Air date</string>
     <string name="characters_not_found">Character not founds</string>
+    <string name="go_to_episode">Go to episode</string>
 </resources>
