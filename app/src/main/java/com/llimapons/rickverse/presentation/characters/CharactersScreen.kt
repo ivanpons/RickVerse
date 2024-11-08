@@ -8,11 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import com.llimapons.rickverse.R
 import com.llimapons.rickverse.designSystem.RickVerseTheme
-import com.llimapons.rickverse.designSystem.components.CharacterGrid
+import com.llimapons.rickverse.designSystem.components.CharacterItem
+import com.llimapons.rickverse.designSystem.components.PagingGrid
 import com.llimapons.rickverse.designSystem.components.RickVerseTopAppBar
 import com.llimapons.rickverse.domain.model.CharacterBO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,11 +52,22 @@ private fun CharactersScreen(
                 .fillMaxSize()
                 .padding(top = padding.calculateTopPadding()),
         ) {
-            CharacterGrid(
-                characters = state,
-                onCharacterClicked = {
-                    onAction(CharactersActions.CharacterClicked(it))
-                }
+            PagingGrid(
+                elements = state,
+                content = { character ->
+                    CharacterItem(
+                        character = character,
+                        onItemClick = {
+                            onAction(CharactersActions.CharacterClicked(character))
+                        },
+                        size = DpSize(120.dp, 120.dp)
+                    )
+                },
+                onKey = { value ->
+                    value.id
+                },
+                modifier = Modifier
+                    .padding(vertical = 16.dp),
             )
         }
     }

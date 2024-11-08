@@ -1,5 +1,8 @@
 package com.llimapons.rickverse.presentation.search
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -16,17 +19,20 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val characterRepository: CharacterRepository
-): ViewModel() {
-
+) : ViewModel() {
 
     private val _searchState = MutableStateFlow<PagingData<CharacterBO>>(PagingData.empty())
     val searchState: StateFlow<PagingData<CharacterBO>> = _searchState
 
-    fun onAction(action: SearchActions){
-        when(action){
+    var searchQuery by mutableStateOf("")
+        private set
+
+    fun onAction(action: SearchActions) {
+        when (action) {
             is SearchActions.CharacterClicked -> {}
             is SearchActions.SearchQueryClicked -> {
                 search(action.query)
+                searchQuery = action.query
             }
         }
     }

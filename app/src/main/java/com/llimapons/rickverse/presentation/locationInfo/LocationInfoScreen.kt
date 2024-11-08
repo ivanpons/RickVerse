@@ -21,12 +21,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import com.llimapons.rickverse.R
 import com.llimapons.rickverse.designSystem.RickVerseTheme
-import com.llimapons.rickverse.designSystem.components.CharacterGrid
+import com.llimapons.rickverse.designSystem.components.CharacterItem
+import com.llimapons.rickverse.designSystem.components.PagingGrid
 import com.llimapons.rickverse.designSystem.components.RickVerseTopAppBar
 import com.llimapons.rickverse.domain.model.CharacterBO
 import com.llimapons.rickverse.domain.model.LocationBO
@@ -115,11 +117,22 @@ private fun LocationInfoScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                     } else {
-                        CharacterGrid(
-                            characters = MutableStateFlow(PagingData.from(state.location.residents)),
-                            onCharacterClicked = {
-                                onAction(LocationInfoActions.CharacterClicked(it))
-                            }
+                        PagingGrid(
+                            elements = MutableStateFlow(PagingData.from(state.location.residents)),
+                            content = { character ->
+                                CharacterItem(
+                                    character = character,
+                                    onItemClick = {
+                                        onAction(LocationInfoActions.CharacterClicked(character))
+                                    },
+                                    size = DpSize(120.dp, 120.dp)
+                                )
+                            },
+                            onKey = { value ->
+                                value.id
+                            },
+                            modifier = Modifier
+                                .padding(vertical = 16.dp),
                         )
                     }
                 }

@@ -30,44 +30,47 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun <T : Any> ListTextPaging(
     items: StateFlow<PagingData<T>>,
-    onItemClicked: (T) -> Unit
+    modifier: Modifier = Modifier,
+    onItemClicked: (T) -> Unit = {}
 ) {
     val pagingItemsPagingItems: LazyPagingItems<T> = items.collectAsLazyPagingItems()
     val lazyListState = rememberLazyListState()
 
     LazyColumn(
-        modifier = Modifier.padding(vertical = 16.dp),
+        modifier = modifier.padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         state = lazyListState
     ) {
-       items(pagingItemsPagingItems.itemCount){ index ->
-           val item = pagingItemsPagingItems[index] ?: return@items
-           val text = when(item){
-               is LocationBO -> item.name
-               is EpisodeBO -> item.episode + " - " + item.name
-               else -> index.toString()
-           }
-           Column(
-               modifier = Modifier
-                   .padding(horizontal = 16.dp)
-                   .clickable {
-                       onItemClicked(item)
-                   }
-           ) {
-               Spacer(modifier = Modifier.height(8.dp))
-               Text(text = text)
-               Spacer(modifier = Modifier.height(8.dp))
-               HorizontalDivider()
-           }
-       }
+        items(pagingItemsPagingItems.itemCount) { index ->
+            val item = pagingItemsPagingItems[index] ?: return@items
+            val text = when (item) {
+                is LocationBO -> item.name
+                is EpisodeBO -> item.episode + " - " + item.name
+                else -> index.toString()
+            }
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clickable {
+                        onItemClicked(item)
+                    }
+            ) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = text)
+                Spacer(modifier = Modifier.height(8.dp))
+                HorizontalDivider()
+            }
+        }
 
         pagingItemsPagingItems.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
-                    item() { PageLoader(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) }
+                    item() {
+                        PageLoader(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    }
                 }
 
                 loadState.refresh is LoadState.Error -> {
