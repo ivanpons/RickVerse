@@ -2,10 +2,8 @@ package com.llimapons.rickverse.designSystem.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -20,43 +18,40 @@ import com.llimapons.rickverse.presentation.util.PageLoader
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun <T : Any> PagingGrid(
-    elements: StateFlow<PagingData<T>>,
+fun <T : Any> PagingList(
+    items: StateFlow<PagingData<T>>,
     content: @Composable (T) -> Unit,
     modifier: Modifier = Modifier,
     onKey: ((T) -> Any)? = null,
-    columns: GridCells = GridCells.FixedSize(size = 160.dp),
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(8.dp),
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceAround,
-    search: String = ""
+    search: String = "",
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp)
 ) {
-    val charactersPagingItems: LazyPagingItems<T> = elements.collectAsLazyPagingItems()
-    val lazyGridState = rememberLazyGridState()
+    val pagingItems: LazyPagingItems<T> = items.collectAsLazyPagingItems()
+    val lazyListState = rememberLazyListState()
 
-    LazyVerticalGrid(
+    LazyColumn(
         modifier = modifier,
-        columns = columns,
         verticalArrangement = verticalArrangement,
-        horizontalArrangement = horizontalArrangement,
-        state = lazyGridState
+        state = lazyListState
     ) {
         items(
-            count = charactersPagingItems.itemCount,
+            count = pagingItems.itemCount,
             key = {
                 if (onKey != null) {
-                    charactersPagingItems[it]?.let { element -> onKey(element) } ?: it
+                    pagingItems[it]?.let { element -> onKey(element) } ?: it
                 } else {
                     it
                 }
-            }) { index ->
-            val element = charactersPagingItems[index] ?: return@items
-            content(element)
+            }
+        ) { index ->
+            val item = pagingItems[index] ?: return@items
+            content(item)
         }
 
-        charactersPagingItems.apply {
+        pagingItems.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
+                    item() {
                         PageLoader(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -65,8 +60,8 @@ fun <T : Any> PagingGrid(
                 }
 
                 loadState.refresh is LoadState.Error -> {
-                    val error = charactersPagingItems.loadState.refresh as LoadState.Error
-                    item(span = { GridItemSpan(maxLineSpan) }) {
+                    val error = pagingItems.loadState.refresh as LoadState.Error
+                    item() {
                         ErrorMessage(
                             modifier = Modifier.fillMaxSize(),
                             message = error.error.localizedMessage!!,
@@ -75,12 +70,12 @@ fun <T : Any> PagingGrid(
                 }
 
                 loadState.append is LoadState.Loading -> {
-                    item(span = { GridItemSpan(maxLineSpan) }) { LoadingNextPageItem(modifier = Modifier) }
+                    item() { LoadingNextPageItem(modifier = Modifier) }
                 }
 
                 loadState.append is LoadState.Error -> {
-                    val error = charactersPagingItems.loadState.append as LoadState.Error
-                    item(span = { GridItemSpan(maxLineSpan) }) {
+                    val error = pagingItems.loadState.append as LoadState.Error
+                    item() {
                         ErrorMessage(
                             modifier = Modifier,
                             message = error.error.localizedMessage!!,
@@ -91,7 +86,7 @@ fun <T : Any> PagingGrid(
         }
     }
 
-    LaunchedEffect(search, charactersPagingItems) {
-        lazyGridState.scrollToItem(0)
+    LaunchedEffect(search, pagingItems) {
+        lazyListState.scrollToItem(0)
     }
 }
