@@ -24,15 +24,11 @@ class SearchViewModel @Inject constructor(
     private val _searchState = MutableStateFlow<PagingData<CharacterBO>>(PagingData.empty())
     val searchState: StateFlow<PagingData<CharacterBO>> = _searchState
 
-    var searchQuery by mutableStateOf("")
-        private set
-
     fun onAction(action: SearchActions) {
         when (action) {
             is SearchActions.CharacterClicked -> {}
             is SearchActions.SearchQueryClicked -> {
                 search(action.query)
-                searchQuery = action.query
             }
         }
     }

@@ -31,7 +31,6 @@ fun SearchScreenRoot(
 ) {
     SearchScreen(
         state = viewModel.searchState,
-        searchedQuery = viewModel.searchQuery,
         onAction = { action ->
             when (action) {
                 is SearchActions.CharacterClicked -> {
@@ -48,7 +47,6 @@ fun SearchScreenRoot(
 @Composable
 private fun SearchScreen(
     state: StateFlow<PagingData<CharacterBO>>,
-    searchedQuery: String,
     onAction: (SearchActions) -> Unit
 ) {
     Column(
@@ -83,8 +81,7 @@ private fun SearchScreen(
                 value.id
             },
             modifier = Modifier
-                .padding(vertical = 16.dp),
-            search = searchedQuery
+                .padding(vertical = 16.dp)
         )
 
     }
@@ -96,7 +93,6 @@ fun SearchScreenPreview() {
     RickVerseTheme {
         SearchScreen(
             state = MutableStateFlow(PagingData.empty()),
-            searchedQuery = "",
             onAction = {}
         )
     }

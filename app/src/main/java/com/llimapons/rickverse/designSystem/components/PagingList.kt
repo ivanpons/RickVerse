@@ -23,7 +23,6 @@ fun <T : Any> PagingList(
     content: @Composable (T) -> Unit,
     modifier: Modifier = Modifier,
     onKey: ((T) -> Any)? = null,
-    search: String = "",
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp)
 ) {
     val pagingItems: LazyPagingItems<T> = items.collectAsLazyPagingItems()
@@ -86,7 +85,14 @@ fun <T : Any> PagingList(
         }
     }
 
-    LaunchedEffect(search, pagingItems) {
-        lazyListState.scrollToItem(0)
+    LaunchedEffect(key1 = pagingItems.loadState.refresh) {
+        when(pagingItems.loadState.refresh){
+            is LoadState.NotLoading -> {
+                lazyListState.scrollToItem(0, scrollOffset = 0)
+            }
+            else -> {
+                //Do nothing
+            }
+        }
     }
 }
